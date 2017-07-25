@@ -211,7 +211,9 @@ static jint TJCompressor_compress
 		_throwarg("Destination buffer is not large enough");
 
 	bailif0(srcBuf=(*env)->GetPrimitiveArrayCritical(env, src, 0));
+    if(srcBuf) (*env)->ReleasePrimitiveArrayCritical(env, src, srcBuf, 0);
 	bailif0(jpegBuf=(*env)->GetPrimitiveArrayCritical(env, dst, 0));
+    if(jpegBuf) (*env)->ReleasePrimitiveArrayCritical(env, dst, jpegBuf, 0);
 
 	if(ProcessSystemProperties(env)<0) goto bailout;
 
@@ -221,8 +223,6 @@ static jint TJCompressor_compress
 		_throwtj();
 
 	bailout:
-	if(jpegBuf) (*env)->ReleasePrimitiveArrayCritical(env, dst, jpegBuf, 0);
-	if(srcBuf) (*env)->ReleasePrimitiveArrayCritical(env, src, srcBuf, 0);
 	return (jint)jpegSize;
 }
 
